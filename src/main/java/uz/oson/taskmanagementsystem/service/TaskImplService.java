@@ -3,6 +3,7 @@ package uz.oson.taskmanagementsystem.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.oson.taskmanagementsystem.entity.Task;
+import uz.oson.taskmanagementsystem.entity.TaskStatus;
 import uz.oson.taskmanagementsystem.payload.TaskCreator;
 import uz.oson.taskmanagementsystem.repository.TaskRepository;
 
@@ -18,6 +19,7 @@ public class TaskImplService implements TaskService{
                 .title(taskCreator.title())
                 .description(taskCreator.description())
                 .dueDate(taskCreator.dueDate())
+                .status(TaskStatus.OPEN)
                 .build());
         return save;
     }
