@@ -12,9 +12,11 @@ import uz.oson.taskmanagementsystem.entity.Task;
 import uz.oson.taskmanagementsystem.entity.TaskStatus;
 import uz.oson.taskmanagementsystem.payload.TaskCreator;
 import uz.oson.taskmanagementsystem.payload.TaskResponse;
+import uz.oson.taskmanagementsystem.payload.TaskUpdater;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -75,6 +77,22 @@ class TaskManagementSystemApplicationTests {
                 ()->assertEquals("test-title",response.title())
         );
 
+    }
+
+    /***================      /tasks/{id} PUT API testing     *============**/
+    @Test
+    @Sql(statements = "INSERT INTO TASK (id, title, description, status) VALUES ('63737ff1-22c5-4f91-aa82-8c39c6d8ec89','test-title','test-description','OPEN')",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(statements = "DELETE FROM TASK WHERE id='63737ff1-22c5-4f91-aa82-8c39c6d8ec89'",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void testTaskUpdating(){
+        TaskUpdater updater = new TaskUpdater("test-update-title","test-update-description",null,TaskStatus.COMPLETED);
+        restTemplate.put(baseUrl+"/{id}", updater,"63737ff1-22c5-4f91-aa82-8c39c6d8ec89");
+        Task task = taskTestRepository.findById(UUID.fromString("63737ff1-22c5-4f91-aa82-8c39c6d8ec89")).get();
+        assertAll(
+                ()->assertNotNull(task),
+                ()->assertEquals("test-update-title",task.getTitle()),
+                ()->assertEquals("test-update-description",task.getDescription()),
+                ()->assertEquals(TaskStatus.COMPLETED,task.getStatus())
+        );
     }
 
 }
