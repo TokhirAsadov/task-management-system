@@ -66,4 +66,23 @@ public class TestingWithMock {
     }
 
 
+    /***================      /tasks/{id} PUT API  << MOCKITO >> testing     *============**/
+    @Test
+    public void testUpdateTaskMock() throws Exception {
+        log.info("testUpdateTaskMock is starting");
+        UUID taskId = UUID.randomUUID();
+        taskResponse = new TaskResponse(taskId, "Updated Task", "Updated Description",null,TaskStatus.IN_PROGRESS);
+        when(taskService.updateTask(any(UUID.class), any(TaskUpdater.class))).thenReturn(taskResponse);
+
+        mockMvc.perform(put("/tasks/{id}", taskId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(taskUpdater)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(taskId.toString()))
+                .andExpect(jsonPath("$.title").value("Updated Task"));
+        log.info("testUpdateTaskMock is over successfully");
+    }
+
+
+
 }
