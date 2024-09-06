@@ -36,4 +36,8 @@ public class Task {
     @Column(name = "due_date")
     private Timestamp dueDate;
 
+    @Column(name = "status",nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TaskStatus status;
+
 }
