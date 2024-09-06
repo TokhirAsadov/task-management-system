@@ -1,8 +1,12 @@
 package uz.oson.taskmanagementsystem.service;
 
-import uz.oson.taskmanagementsystem.entity.Task;
 import uz.oson.taskmanagementsystem.payload.TaskCreator;
+import uz.oson.taskmanagementsystem.payload.TaskResponse;
+
+import java.util.Set;
 
 public interface TaskService {
-    Task createTask(TaskCreator taskCreator);
+    TaskResponse createTask(TaskCreator taskCreator);
+
+    Set<TaskResponse> getAllTasks();
 }
