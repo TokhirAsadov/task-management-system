@@ -95,4 +95,14 @@ class TaskManagementSystemApplicationTests {
         );
     }
 
+    /***================      /tasks/{id} DELETE API testing     *============**/
+    @Test
+    @Sql(statements = "INSERT INTO TASK (id, title, description, status) VALUES ('7cc7d269-4c7b-4f20-8471-6c473f7a5ed5','test-DELETE-title','test-DELETE-description','OPEN')",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void testDeletingTask(){
+        int taskCount = taskTestRepository.findAll().size();
+        assertEquals(1,taskCount);
+        restTemplate.delete(baseUrl+"/{id}","7cc7d269-4c7b-4f20-8471-6c473f7a5ed5");
+        assertEquals(0,taskTestRepository.findAll().size());
+    }
+
 }
