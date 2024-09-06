@@ -29,6 +29,10 @@ public class TaskController {
         return "task is created successfully";
     }
 
-
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public Set<TaskResponse> getAllTasks(){
+        return taskService.getAllTasks();
+    }
 
 }
