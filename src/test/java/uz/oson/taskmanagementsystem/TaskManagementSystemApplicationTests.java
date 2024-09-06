@@ -16,7 +16,7 @@ import uz.oson.taskmanagementsystem.payload.TaskResponse;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TaskManagementSystemApplicationTests {
@@ -61,6 +61,20 @@ class TaskManagementSystemApplicationTests {
         Set<TaskResponse> tasks = restTemplate.getForObject(baseUrl, Set.class);
         assertEquals(1,tasks.size());
         assertEquals(1,taskTestRepository.findAll().size());
+    }
+
+    /***================      /tasks/{id} GET API testing     *============**/
+    @Test
+    @Sql(statements = "INSERT INTO TASK (id, title, description, status) VALUES ('5985aabd-9942-4a5e-9cb2-920665068e4a','test-title','test-description','OPEN')",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(statements = "DELETE FROM TASK WHERE id='5985aabd-9942-4a5e-9cb2-920665068e4a'",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void testGetSingleTask(){
+        TaskResponse response = restTemplate.getForObject(baseUrl+"/{id}", TaskResponse.class,"5985aabd-9942-4a5e-9cb2-920665068e4a");
+        assertAll(
+                ()->assertNotNull(response),
+                ()->assertEquals("5985aabd-9942-4a5e-9cb2-920665068e4a",response.id().toString()),
+                ()->assertEquals("test-title",response.title())
+        );
+
     }
 
 }
