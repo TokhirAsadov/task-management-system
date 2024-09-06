@@ -8,8 +8,6 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 public record TaskUpdater(
-        @NotNull(message = "Id should be not null")
-        UUID id,
         @NotNull(message = "Title should be not null")
         @Size(min = 1, max = 255, message = "Title should have at least 2 characters")
         String title,

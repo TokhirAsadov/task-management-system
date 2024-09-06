@@ -34,9 +34,9 @@ public class TaskImplService implements TaskService{
     }
 
     @Override
-    public TaskResponse updateTask(TaskUpdater taskUpdater) {
-        if (taskRepository.existsById(taskUpdater.id())) {
-            Task task = taskRepository.findById(taskUpdater.id()).get();
+    public TaskResponse updateTask(UUID id,TaskUpdater taskUpdater) {
+        if (taskRepository.existsById(id)) {
+            Task task = taskRepository.findById(id).get();
             task.setTitle(taskUpdater.title());
             task.setDescription(taskUpdater.description());
             task.setDueDate(taskUpdater.dueDate());

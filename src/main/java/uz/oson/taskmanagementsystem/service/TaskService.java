@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface TaskService {
     TaskResponse createTask(TaskCreator taskCreator);
-    TaskResponse updateTask(TaskUpdater taskUpdater);
+    TaskResponse updateTask(UUID id,TaskUpdater taskUpdater);
 
     Set<TaskResponse> getAllTasks();
 
