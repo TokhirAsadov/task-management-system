@@ -26,7 +26,8 @@ public class Task {
     private UUID id;
 
     @Column(name = "title",nullable = false)
-    @Size(min = 1, max = 255, message = "Name should have at least 2 characters")
+    @NotNull(message = "Title should be not null")
+    @Size(min = 2, max = 255, message = "Title should have at least 2 characters")
     private String title;
 
     @Column(name = "description")
