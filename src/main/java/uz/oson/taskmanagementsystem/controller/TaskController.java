@@ -3,12 +3,18 @@ package uz.oson.taskmanagementsystem.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import uz.oson.taskmanagementsystem.exceptions.DataNotFoundException;
 import uz.oson.taskmanagementsystem.payload.TaskCreator;
 import uz.oson.taskmanagementsystem.payload.TaskResponse;
 import uz.oson.taskmanagementsystem.service.TaskService;
 
+import java.net.URI;
 import java.util.Set;
 import java.util.UUID;
 
@@ -22,12 +28,15 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String taskCreating(@RequestBody @Valid TaskCreator creator){
+    public EntityModel<TaskResponse> taskCreating(@RequestBody @Valid TaskCreator creator){
         log.info("Saving new task is starting, task creator is: {}",creator);
         TaskResponse response = taskService.createTask(creator);
         log.info("Saving new task is over, task id: {}", response.id());
 
-        return "task is created successfully";
+        EntityModel<TaskResponse> entityModel = EntityModel.of(response);
+        WebMvcLinkBuilder link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getSingleTask(response.id()));
+        entityModel.add(link.withRel("this-task"));
+        return entityModel;
     }
 
     @GetMapping
@@ -38,8 +47,16 @@ public class TaskController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TaskResponse getSingleTask(@PathVariable UUID id){
-        return taskService.getSingleTask(id);
+    public EntityModel<TaskResponse> getSingleTask(@PathVariable UUID id){
+        TaskResponse taskResponse = taskService.getSingleTask(id);
+        if (taskResponse == null) {
+            throw new DataNotFoundException("id: "+ id);
+        }
+
+        EntityModel<TaskResponse> entityModel = EntityModel.of(taskResponse);
+        WebMvcLinkBuilder link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getAllTasks());
+        entityModel.add(link.withRel("all-tasks"));
+        return entityModel;
     }
 
 }
