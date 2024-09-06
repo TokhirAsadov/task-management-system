@@ -7,11 +7,14 @@ import uz.oson.taskmanagementsystem.entity.TaskStatus;
 import uz.oson.taskmanagementsystem.exceptions.DataNotFoundException;
 import uz.oson.taskmanagementsystem.payload.TaskCreator;
 import uz.oson.taskmanagementsystem.payload.TaskResponse;
+import uz.oson.taskmanagementsystem.payload.TaskUpdater;
 import uz.oson.taskmanagementsystem.repository.TaskRepository;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +31,22 @@ public class TaskImplService implements TaskService{
                 .status(TaskStatus.OPEN)
                 .build());
         return new TaskResponse(save.getId(), save.getTitle(), save.getDescription(), save.getDueDate(), save.getStatus());
+    }
+
+    @Override
+    public TaskResponse updateTask(TaskUpdater taskUpdater) {
+        if (taskRepository.existsById(taskUpdater.id())) {
+            Task task = taskRepository.findById(taskUpdater.id()).get();
+            task.setTitle(taskUpdater.title());
+            task.setDescription(taskUpdater.description());
+            task.setDueDate(taskUpdater.dueDate());
+            task.setStatus(taskUpdater.status());
+            Task updated = taskRepository.save(task);
+            return new TaskResponse(updated.getId(), updated.getTitle(), updated.getDescription(), updated.getDueDate(), updated.getStatus());
+        }
+        else {
+            throw new DataNotFoundException("Task with id " + id + " not found");
+        }
     }
 
     @Override
