@@ -10,6 +10,7 @@ import uz.oson.taskmanagementsystem.payload.TaskResponse;
 import uz.oson.taskmanagementsystem.service.TaskService;
 
 import java.util.Set;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,6 +34,12 @@ public class TaskController {
     @ResponseStatus(HttpStatus.OK)
     public Set<TaskResponse> getAllTasks(){
         return taskService.getAllTasks();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskResponse getSingleTask(@PathVariable UUID id){
+        return taskService.getSingleTask(id);
     }
 
 }
