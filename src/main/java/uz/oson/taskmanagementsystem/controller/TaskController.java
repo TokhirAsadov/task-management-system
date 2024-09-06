@@ -53,6 +53,7 @@ public class TaskController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Set<TaskResponse> getAllTasks(){
+        log.info("getAllTasks is working");
         return taskService.getAllTasks();
     }
 
@@ -67,12 +68,14 @@ public class TaskController {
         EntityModel<TaskResponse> entityModel = EntityModel.of(taskResponse);
         WebMvcLinkBuilder link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getAllTasks());
         entityModel.add(link.withRel("all-tasks"));
+        log.info("getSingleTask is working, task id: {}", taskResponse.id());
         return entityModel;
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String deletingTask(@PathVariable UUID id){
+        log.info("deletingTask is working, task id: {}", id);
         return taskService.deleteTask(id);
     }
 
