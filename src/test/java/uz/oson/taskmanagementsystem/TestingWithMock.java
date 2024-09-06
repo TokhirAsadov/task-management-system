@@ -115,5 +115,18 @@ public class TestingWithMock {
         log.info("testGetSingleTaskMock is over successfully");
     }
 
+    /***================      /tasks/{id} DELETE API  << MOCKITO >> testing     *============**/
+    @Test
+    public void testDeleteTaskMock() throws Exception {
+        log.info("testDeleteTaskMock is starting");
+        UUID taskId = UUID.randomUUID();
+        when(taskService.deleteTask(any(UUID.class))).thenReturn("Task deleted successfully");
+
+        mockMvc.perform(delete("/tasks/{id}", taskId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Task deleted successfully"));
+        log.info("testDeleteTaskMock is over successfully");
+    }
 
 }
