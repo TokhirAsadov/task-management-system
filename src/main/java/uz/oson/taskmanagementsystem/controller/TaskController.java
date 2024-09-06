@@ -37,11 +37,11 @@ public class TaskController {
         return entityModel;
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public EntityModel<TaskResponse> taskUpdating(@RequestBody @Valid TaskUpdater updater){
-        log.info("Updating new task is starting, task creator is: {}",updater);
-        TaskResponse response = taskService.updateTask(updater);
+    public EntityModel<TaskResponse> taskUpdating(@PathVariable UUID id,@RequestBody @Valid TaskUpdater updater){
+        log.info("Updating new task is starting,id: {}, task updater is: {}",id,updater);
+        TaskResponse response = taskService.updateTask(id,updater);
         log.info("Updating new task is over, task id: {}", response.id());
 
         EntityModel<TaskResponse> entityModel = EntityModel.of(response);
