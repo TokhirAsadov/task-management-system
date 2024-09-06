@@ -16,6 +16,7 @@ import uz.oson.taskmanagementsystem.payload.TaskResponse;
 import uz.oson.taskmanagementsystem.payload.TaskUpdater;
 import uz.oson.taskmanagementsystem.service.TaskService;
 
+import java.util.Set;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -81,6 +82,21 @@ public class TestingWithMock {
                 .andExpect(jsonPath("$.id").value(taskId.toString()))
                 .andExpect(jsonPath("$.title").value("Updated Task"));
         log.info("testUpdateTaskMock is over successfully");
+    }
+
+
+    /***================      /tasks GET API  << MOCKITO >> testing     *============**/
+    @Test
+    public void testGetAllTasksMock() throws Exception {
+        log.info("testGetAllTasksMock is starting");
+        when(taskService.getAllTasks()).thenReturn(Set.of(taskResponse));
+
+        mockMvc.perform(get("/tasks")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(taskResponse.id().toString()))
+                .andExpect(jsonPath("$[0].title").value(taskResponse.title()));
+        log.info("testGetAllTasksMock is over successfully");
     }
 
 
