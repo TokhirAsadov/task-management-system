@@ -70,4 +70,10 @@ public class TaskController {
         return entityModel;
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public String deletingTask(@PathVariable UUID id){
+        return taskService.deleteTask(id);
+    }
+
 }
