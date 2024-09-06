@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(TaskController.class)
 @Slf4j
-public class TestingWithMock {
+public class TastTestingWithMock {
 
     @Autowired
     private MockMvc mockMvc;
