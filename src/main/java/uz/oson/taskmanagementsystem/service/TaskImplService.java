@@ -75,4 +75,20 @@ public class TaskImplService implements TaskService{
             throw new DataNotFoundException("Task with id " + id + " not found");
         }
     }
+
+    @Override
+    public String deleteTask(UUID id) {
+        if (taskRepository.existsById(id)) {
+            try {
+                taskRepository.deleteById(id);
+                return "Task with id " + id + " deleted successfully";
+            }
+            catch (Exception e) {
+                throw new DataNotFoundException("Error while deleting task with id " + id);
+            }
+        }
+        else {
+            throw new DataNotFoundException("Task with id " + id + " not found");
+        }
+    }
 }
