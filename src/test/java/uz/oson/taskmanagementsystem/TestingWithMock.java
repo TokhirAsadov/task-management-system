@@ -100,5 +100,20 @@ public class TestingWithMock {
     }
 
 
+    /***================      /tasks/{id} GET API  << MOCKITO >> testing     *============**/
+    @Test
+    public void testGetSingleTaskMock() throws Exception {
+        log.info("testGetSingleTaskMock is starting");
+        UUID taskId = taskResponse.id();
+        when(taskService.getSingleTask(any(UUID.class))).thenReturn(taskResponse);
+
+        mockMvc.perform(get("/tasks/{id}", taskId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(taskId.toString()))
+                .andExpect(jsonPath("$.title").value(taskResponse.title()));
+        log.info("testGetSingleTaskMock is over successfully");
+    }
+
 
 }
