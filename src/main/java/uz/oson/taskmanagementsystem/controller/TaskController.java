@@ -6,15 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import uz.oson.taskmanagementsystem.exceptions.DataNotFoundException;
 import uz.oson.taskmanagementsystem.payload.TaskCreator;
 import uz.oson.taskmanagementsystem.payload.TaskResponse;
+import uz.oson.taskmanagementsystem.payload.TaskUpdater;
 import uz.oson.taskmanagementsystem.service.TaskService;
 
-import java.net.URI;
 import java.util.Set;
 import java.util.UUID;
 
@@ -32,6 +30,19 @@ public class TaskController {
         log.info("Saving new task is starting, task creator is: {}",creator);
         TaskResponse response = taskService.createTask(creator);
         log.info("Saving new task is over, task id: {}", response.id());
+
+        EntityModel<TaskResponse> entityModel = EntityModel.of(response);
+        WebMvcLinkBuilder link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getSingleTask(response.id()));
+        entityModel.add(link.withRel("this-task"));
+        return entityModel;
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public EntityModel<TaskResponse> taskUpdating(@RequestBody @Valid TaskUpdater updater){
+        log.info("Updating new task is starting, task creator is: {}",updater);
+        TaskResponse response = taskService.updateTask(updater);
+        log.info("Updating new task is over, task id: {}", response.id());
 
         EntityModel<TaskResponse> entityModel = EntityModel.of(response);
         WebMvcLinkBuilder link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getSingleTask(response.id()));
