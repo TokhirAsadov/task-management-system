@@ -14,4 +14,5 @@ public interface TaskService {
     Set<TaskResponse> getAllTasks();
 
     TaskResponse getSingleTask(UUID id);
+    String deleteTask(UUID id);
 }
