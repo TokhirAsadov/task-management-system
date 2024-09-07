@@ -1,4 +1,4 @@
-# Spring Boot 3 Observability with Grafana Stack
+# Task Management System
 
 This project contains the source code for the [OSON.UZ](https://github.com/TokhirAsadov/task-management-system).
 ### by [Tokhir Asadov](https://github.com/TokhirAsadov)
